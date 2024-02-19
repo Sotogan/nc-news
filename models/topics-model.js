@@ -1,4 +1,6 @@
 const db=require('../db/connection')
+const fs=require('fs/promises')
+
 
 
 exports.selectTopics=()=>{
@@ -8,3 +10,22 @@ exports.selectTopics=()=>{
     return result.rows
  })
 }
+
+exports.selectApiEndPoints=()=>{
+  return fs
+  .readFile('./endpoints.json','utf-8').then((fileContents)=>{
+   const info=JSON.parse(fileContents)
+   const wantedInfo={}
+    for (const key in info){
+     wantedInfo[key]=info[key].description
+
+    }
+  
+      
+   return wantedInfo
+    
+   });
+
+
+  }
+

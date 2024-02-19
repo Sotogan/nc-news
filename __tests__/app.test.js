@@ -3,6 +3,7 @@ const app=require('../app.js');
 const db=require('../db/connection.js');
 const seed= require('../db/seeds/seed.js');
 const testData=require ('../db/data/test-data/index.js');
+const endPoints=require('../endpoints.json')
 
 
 beforeEach(()=>seed(testData));
@@ -33,4 +34,20 @@ describe('GET /api/topics', () => {
             expect(error.msg).toBe('Path not found')
         })
     });
+});
+describe('GET /api', () => {
+    test('should respond with an object  describing all the available end points', () => {
+        return request(app).get('/api')
+        .expect(200)
+        .then((response)=>{
+           const res=response.body 
+           
+            for(const key in res){
+                
+            expect(res[key]).toEqual(endPoints[key].description)
+        }
+        })
+        
+    });
+    
 });

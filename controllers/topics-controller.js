@@ -1,5 +1,5 @@
 
-const {selectTopics}=require('../models/topics-model')
+const {selectTopics,selectApiEndPoints}=require('../models/topics-model')
 
 
 
@@ -12,4 +12,13 @@ exports.getTopics=(req,res,next)=>{
 
         next(err)
       }) 
+}
+exports.getApiEndPoints=(req,res,next)=>{
+  selectApiEndPoints().then((info)=>{
+   
+       res.status(200).send(info)
+  }).catch((err)=>{
+
+    next(err)
+  })
 }
