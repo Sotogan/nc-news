@@ -4,6 +4,7 @@ const db=require('../db/connection.js');
 const seed= require('../db/seeds/seed.js');
 const testData=require ('../db/data/test-data/index.js');
 const endPoints=require('../endpoints.json');
+const { convertTimestampToDate } = require('../db/seeds/utils.js');
 
 
 beforeEach(()=>seed(testData));
@@ -59,7 +60,7 @@ describe('GET /api/articles/:article_id', () => {
         .then(({body})=>{
             expect(body.article).toEqual(
             expect.objectContaining(
-                {
+                {article_id:3,
                   title: "Eight pug gifs that remind me of mitch",
                   topic: "mitch",
                   author: "icellusedkars",
@@ -94,3 +95,33 @@ describe('GET /api/articles/:article_id', () => {
     });
     
 })
+describe('GET /api/articles', () => {
+    test('should  respond with an array containing all articles', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({body})=>{
+            const {articles}=body;
+            expect(articles).toBeInstanceOf(Array)
+            expect(articles).toHaveLength(13)
+            articles.forEach((article)=>{
+                expect(article).toMatchObject({
+                   article_id: expect.any(Number),
+                    title: expect.any(String),
+                    topic :expect.any(String),
+                    author: expect.any(String),
+                     created_at:expect.any(String),  //<-----typeOf Date doesn't work what coul i use?
+                    votes:expect.any(Number),
+                    article_img_url:expect.any(String), //<----type of URL doesn't work either.What coul i use?
+                    comment_count:expect.any(String)
+
+                } 
+                )
+            })
+
+        })
+    });
+
+     
+    
+});

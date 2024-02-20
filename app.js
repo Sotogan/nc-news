@@ -1,12 +1,13 @@
 const express=require('express')
 const app=express()
 const{getTopics,getApiEndPoints,getArticleById}=require('./controllers/topics-controller')
-
+const {getArticles}=require('./controllers/articles-controller')
 
 
 app.get('/api/topics',getTopics)
 app.get('/api',getApiEndPoints)
 app.get(`/api/articles/:article_id`,getArticleById)
+app.get('/api/articles',getArticles )
 
 
  
