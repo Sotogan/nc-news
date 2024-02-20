@@ -3,7 +3,7 @@ const app=require('../app.js');
 const db=require('../db/connection.js');
 const seed= require('../db/seeds/seed.js');
 const testData=require ('../db/data/test-data/index.js');
-const endPoints=require('../endpoints.json')
+const endPoints=require('../endpoints.json');
 
 
 beforeEach(()=>seed(testData));
@@ -41,13 +41,56 @@ describe('GET /api', () => {
         .expect(200)
         .then((response)=>{
            const res=response.body 
-           
-            for(const key in res){
-                
-            expect(res[key]).toEqual(endPoints[key].description)
-        }
+                       
+            expect(res).toEqual(endPoints)
+        
         })
         
     });
     
 });
+
+describe('GET /api/articles/:article_id', () => {
+
+    test('should respond with an object containing specific article ', () => {
+        const article_id= 3
+        return request(app).get(`/api/articles/${article_id}`)
+        .expect(200)
+        .then(({body})=>{
+            expect(body.article).toEqual(
+            expect.objectContaining(
+                {
+                  title: "Eight pug gifs that remind me of mitch",
+                  topic: "mitch",
+                  author: "icellusedkars",
+                  body: "some gifs",
+                  article_img_url:
+                    "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+                })
+           )
+
+        })
+    })
+    test('should respon with an error if given a snack_id of a valid type that does not exist in our data', () => {
+        return request(app)
+        .get('/api/articles/666666')
+        .expect (404)
+        .then((response)=>{
+          
+            const error=response.body
+          
+            expect(error.msg).toBe('id not found')
+        })
+    });
+    test('should respon with an error if given a snack_id of a  NON-valid type that does not exist in our database', () => {
+        return request(app)
+        .get('/api/articles/forklift')
+        .expect(400)
+        .then((response)=>{
+
+            const error=response.body
+            expect(error.msg).toBe('bad request')
+        })        
+    });
+    
+})
