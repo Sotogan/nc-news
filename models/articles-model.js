@@ -3,27 +3,9 @@ const fs=require('fs/promises')
 
 
 exports.selectArticles=()=>{
-       let sqlString='SELECT (article_id),author,title,topic,created_at,votes,article_img_url FROM articles ORDER BY created_at DESC;'
-        let sqlString2='SELECT article_id, COUNT (article_id) FROM comments GROUP BY article_id;'
-;        
-        return db.query(sqlString).then((result)=>{
-               let res1=result.rows          
-          return  db.query(sqlString2).then((result)=>{
-             const res2=result.rows             
-              for(let i=0; i<res1.length; i++){
-                for(let j=0; j<res2.length; j++){
-                    res1[i].comment_count='0'
-                    if(res1[i].article_id===res2[j].article_id){
-                        res1[i].comment_count=res2[j].count
-                    }
-                                }
-                }
-                
-                 return res1
-
-                             
-            })
+       
+        return db.query('SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url,COUNT(comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id=comments.article_id GROUP BY articles.article_id ORDER BY created_at DESC;')
+        .then((result)=>{
+           return result.rows  })        
         
-   
-    })
 }

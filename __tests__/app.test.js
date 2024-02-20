@@ -72,7 +72,7 @@ describe('GET /api/articles/:article_id', () => {
 
         })
     })
-    test('should respon with an error if given a snack_id of a valid type that does not exist in our data', () => {
+    test('should respon with an error if given a article_id of a valid type that does not exist in our data', () => {
         return request(app)
         .get('/api/articles/666666')
         .expect (404)
@@ -83,7 +83,7 @@ describe('GET /api/articles/:article_id', () => {
             expect(error.msg).toBe('id not found')
         })
     });
-    test('should respon with an error if given a snack_id of a  NON-valid type that does not exist in our database', () => {
+    test('should respon with an error if given a aritcle_id of a  NON-valid type that does not exist in our database', () => {
         return request(app)
         .get('/api/articles/forklift')
         .expect(400)
@@ -110,9 +110,9 @@ describe('GET /api/articles', () => {
                     title: expect.any(String),
                     topic :expect.any(String),
                     author: expect.any(String),
-                     created_at:expect.any(String),  //<-----typeOf Date doesn't work what coul i use?
+                     created_at:expect.any(String),  
                     votes:expect.any(Number),
-                    article_img_url:expect.any(String), //<----type of URL doesn't work either.What coul i use?
+                    article_img_url:expect.any(String),
                     comment_count:expect.any(String)
 
                 } 
@@ -122,6 +122,50 @@ describe('GET /api/articles', () => {
         })
     });
 
-     
-    
 });
+describe('GET /api/articles/:article:id/comments', () => {
+      test('should return an array of comments for the given article_id of which each comment should have specific properties ', () => {
+        const article_id=1
+        return request(app).get(`/api/articles/${article_id}/comments`)
+        .expect(200).then(({body})=>{
+            const {comments}=body
+            expect(comments).toBeInstanceOf(Array)
+            expect(comments).toHaveLength(11)
+
+            comments.forEach((comment)=>{
+                expect(comment).toMatchObject({
+                   article_id: expect.any(Number),
+                    body: expect.any(String),
+                     author: expect.any(String),
+                     created_at:expect.any(String),  
+                    votes:expect.any(Number),
+                    comment_id:expect.any(Number)
+
+        })
+      });
+    
+})
+      })
+
+    //   test('should respon with an error if given a article_id of a valid type that does not exist in our data', () => {
+    //     return request(app)
+    //     .get('/api/articles/666666/comments')
+    //     .expect (404)
+    //     .then((response)=>{
+          
+    //         const error=response.body
+          
+    //         expect(error.msg).toBe('id not found')
+    //     })
+    // });
+    // test('should respon with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
+    //     return request(app)
+    //     .get('/api/articles/forklift/comments')
+    //     .expect(400)
+    //     .then((response)=>{
+
+    //         const error=response.body
+    //         expect(error.msg).toBe('bad request')
+    //     })        
+    // });
+    })

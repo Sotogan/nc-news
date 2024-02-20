@@ -2,13 +2,13 @@ const express=require('express')
 const app=express()
 const{getTopics,getApiEndPoints,getArticleById}=require('./controllers/topics-controller')
 const {getArticles}=require('./controllers/articles-controller')
-
+const {getComments}=require('./controllers/comments-controller')
 
 app.get('/api/topics',getTopics)
 app.get('/api',getApiEndPoints)
 app.get(`/api/articles/:article_id`,getArticleById)
 app.get('/api/articles',getArticles )
-
+app.get(`/api/articles/:article_id/comments`,getComments)
 
  
 app.all("/*",(request,response,next)=>{
