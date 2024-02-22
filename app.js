@@ -3,7 +3,7 @@ const app=express()
 const{getTopics,getApiEndPoints,getArticleById}=require('./controllers/topics-controller')
 const {getArticles,updateArticleById}=require('./controllers/articles-controller')
 const {getComments,createComment,deleteComment}=require('./controllers/comments-controller')
- 
+
 app.use(express.json())
 //GET
 app.get('/api/topics',getTopics)
@@ -11,6 +11,7 @@ app.get('/api',getApiEndPoints)
 app.get(`/api/articles/:article_id`,getArticleById)
 app.get('/api/articles',getArticles )
 app.get(`/api/articles/:article_id/comments`,getComments)
+//app.get('api/users', getUsers)
 
  
 //POST
@@ -23,18 +24,11 @@ app.patch('/api/articles/:article_id', updateArticleById)
 app.delete('/api/comments/:comment_id',deleteComment)
 
 
-
-
-
-
-app.all("/*",(request,response,next)=>{
-    
-    response.status(404).send({msg:'Path not found'})
-    next(err)
-})
+//ERROR HANDLING
 
 
 app.use((err,request,response,next)=>{
+    
     if(err.code === '22P02'){
         response.status(400).send({msg:'bad request'})
     }
@@ -42,13 +36,17 @@ app.use((err,request,response,next)=>{
 })
 
 app.use((err,request,response,next)=>{
-   
     if(err.status && err.msg){
         response.status(err.status).send({msg:err.msg})
     }
     next(err)
 
 
+})
+app.all("/*",(request,response,next)=>{
+    
+    response.status(404).send({msg:'Path not found'})
+    next(err)
 })
 
 
