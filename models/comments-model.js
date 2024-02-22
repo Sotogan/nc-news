@@ -16,7 +16,6 @@ return db.query(`SELECT comment_id,comments.votes,comments.created_at,comments.a
    const  article_id=param.article_id 
   return db.query(`INSERT INTO comments (body, author, article_id) VALUES ($1,$2,$3) RETURNING *;`,[body,author,article_id])
   .then(({rows})=>{
-    console.log(rows)
     if (rows.length===0){
         return Promise.reject({status:404, msg:'id not found'})
     }
