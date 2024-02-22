@@ -2,7 +2,9 @@ const express=require('express')
 const app=express()
 const{getTopics,getApiEndPoints,getArticleById}=require('./controllers/topics-controller')
 const {getArticles}=require('./controllers/articles-controller')
-const {getComments}=require('./controllers/comments-controller')
+const {getComments,createComment}=require('./controllers/comments-controller')
+ 
+app.use(express.json())
 
 app.get('/api/topics',getTopics)
 app.get('/api',getApiEndPoints)
@@ -11,6 +13,14 @@ app.get('/api/articles',getArticles )
 app.get(`/api/articles/:article_id/comments`,getComments)
 
  
+//POST
+app.post('/api/articles/:article_id/comments',createComment)
+
+
+
+
+
+
 app.all("/*",(request,response,next)=>{
     
     response.status(404).send({msg:'Path not found'})

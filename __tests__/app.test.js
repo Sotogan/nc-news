@@ -5,6 +5,7 @@ const seed= require('../db/seeds/seed.js');
 const testData=require ('../db/data/test-data/index.js');
 const endPoints=require('../endpoints.json');
 const { convertTimestampToDate } = require('../db/seeds/utils.js');
+const { string } = require('pg-format');
 
 
 beforeEach(()=>seed(testData));
@@ -121,6 +122,8 @@ describe('GET /api/articles', () => {
 
         })
     });
+   
+
 
 });
 describe('GET /api/articles/:article:id/comments', () => {
@@ -146,7 +149,17 @@ describe('GET /api/articles/:article:id/comments', () => {
     
 })
       })
-
+    //   test('should return an array of comments for the given article_id of which each comment should have specific properties ', () => {
+    //     const article_id=2
+    //     return request(app).get(`/api/articles/${article_id}/comments`)
+    //     .expect(200).then(({body})=>{
+    //         const {comments}=body
+    //         expect(comments).toBeInstanceOf(Array)
+    //         expect(comments).toHaveLength(0)
+    //     })
+    // }
+    //     )
+  
       test('should respon with an error if given a article_id of a valid type that does not exist in our data', () => {
          return request(app)
          .get('/api/articles/666666/comments')
@@ -169,3 +182,53 @@ describe('GET /api/articles/:article:id/comments', () => {
          })        
      });
     })
+    describe('POST  /api/articles/:article_id/comments', () => {
+
+        test('should return new object with the values of the new message', () => {
+            
+    
+        const newComment={
+            username:'butter_bridge',
+            body:'blah blah blah,yada,yada ,yada'
+        }
+        return request(app)
+        .post('/api/articles/2/comments')
+        .expect(201)
+        .send(newComment)
+        .then(({body})=>{
+            expect(body.comment).toEqual(
+                {
+                    comment_id: 19,
+                    body: 'blah blah blah,yada,yada ,yada',
+                    article_id: 2,
+                    author: 'butter_bridge',
+                    votes: 0,
+                    created_at: expect.any(String)
+                  })
+
+        })
+    });
+    test('should respon with an error if given a article_id of a valid type that does not exist in our data', () => {
+        return request(app)
+        .get('/api/articles/666666/comments')
+        .expect (404)
+        .then((response)=>{
+         
+            const error=response.body
+         
+            expect(error.msg).toBe('id not found')
+        })
+        
+    });
+    test('should respon with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
+        return request(app)
+        .get('/api/articles/forklift/comments')
+        .expect(400)
+        .then((response)=>{
+
+            const error=response.body
+            expect(error.msg).toBe('bad request')
+        })        
+    });
+        
+    });
