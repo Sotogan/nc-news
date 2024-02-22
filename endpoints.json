@@ -102,6 +102,12 @@
       }
     ]
 
+},
+"DELETE /api/comments/:comment_id":{
+  "description": "deletes comment with the given comment_id",
+   "queries":["comment,delete,comment_id"]
+  
+
 }
 }
 

@@ -4,8 +4,6 @@ const db=require('../db/connection.js');
 const seed= require('../db/seeds/seed.js');
 const testData=require ('../db/data/test-data/index.js');
 const endPoints=require('../endpoints.json');
-const { convertTimestampToDate } = require('../db/seeds/utils.js');
-const { string } = require('pg-format');
 
 
 beforeEach(()=>seed(testData));
@@ -149,18 +147,18 @@ describe('GET /api/articles/:article:id/comments', () => {
     
 })
       })
-    //   test('should return an array of comments for the given article_id of which each comment should have specific properties ', () => {
-    //     const article_id=2
+    //    test('should return an empty array for 0 comments for the given article_id ', () => {
+    //      const article_id=2
     //     return request(app).get(`/api/articles/${article_id}/comments`)
-    //     .expect(200).then(({body})=>{
-    //         const {comments}=body
-    //         expect(comments).toBeInstanceOf(Array)
-    //         expect(comments).toHaveLength(0)
-    //     })
-    // }
-    //     )
+    //      .expect(200).then(({body})=>{
+    //          const {comments}=body
+    //          expect(comments).toBeInstanceOf(Array)
+    //          expect(comments).toHaveLength(0)
+    //      })
+    //  }
+    //      )
   
-      test('should respon with an error if given a article_id of a valid type that does not exist in our data', () => {
+      test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
          return request(app)
          .get('/api/articles/666666/comments')
          .expect (404)
@@ -208,10 +206,11 @@ describe('GET /api/articles/:article:id/comments', () => {
 
         })
     });
-    test('should respon with an error if given a article_id of a valid type that does not exist in our data', () => {
+    test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
         return request(app)
-        .get('/api/articles/666666/comments')
+        .post('/api/articles/666666/comments')
         .expect (404)
+        
         .then((response)=>{
          
             const error=response.body
@@ -222,7 +221,7 @@ describe('GET /api/articles/:article:id/comments', () => {
     });
     test('should respon with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
         return request(app)
-        .get('/api/articles/forklift/comments')
+        .post('/api/articles/forklift/comments')
         .expect(400)
         .then((response)=>{
 
@@ -246,6 +245,20 @@ describe('GET /api/articles/:article:id/comments', () => {
             
             
         });
+        test('should respond with an error if given a article_id of an  invalid type', () => {
+            const article_id='forklift'
+            const newvote=1
+            return request(app)
+            .patch(`/api/articles/${article_id}`)
+            .expect(400)
+            .then((response)=>{
+   
+        
+                const error=response.body
+                
+                expect(error.msg).toBe('bad request')
+            })        
+        });
         
     });
 
@@ -263,3 +276,12 @@ describe('GET /api/articles/:article:id/comments', () => {
         });
         
     });
+
+    // describe('GET /api/users', () => {
+    //     test('should delete comment with given comment_id ',async () => {
+    //         c
+                       
+            
+    //     });
+        
+    // });
