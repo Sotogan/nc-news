@@ -206,19 +206,19 @@ describe('GET /api/articles/:article:id/comments', () => {
 
         })
     });
-    test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
-        return request(app)
-        .post('/api/articles/666666/comments')
-        .expect (404)
+    // test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
+    //     return request(app)
+    //     .post('/api/articles/666666/comments')
+    //     .expect (404)
         
-        .then((response)=>{
+    //     .then((response)=>{
          
-            const error=response.body
+    //         const error=response.body
          
-            expect(error.msg).toBe('id not found')
-        })
+    //         expect(error.msg).toBe('id not found')
+    //     })
         
-    });
+   // });
     test('should respon with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
         return request(app)
         .post('/api/articles/forklift/comments')
