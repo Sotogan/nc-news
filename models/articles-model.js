@@ -9,3 +9,15 @@ exports.selectArticles=()=>{
            return result.rows  })        
         
 }
+exports.updatedArticleById=(article_id,votesUpdate)=>{
+        const id=Number(article_id.article_id)
+        const votes=votesUpdate.vote_inc
+        return db.query(`UPDATE articles SET votes= votes + $1 WHERE article_id=$2 RETURNING *;`,[votes,id])
+          .then((result)=>{
+              
+                return result.rows
+          
+
+          })
+
+}

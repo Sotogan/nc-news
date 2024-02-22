@@ -1,7 +1,7 @@
 const express=require('express')
 const app=express()
 const{getTopics,getApiEndPoints,getArticleById}=require('./controllers/topics-controller')
-const {getArticles}=require('./controllers/articles-controller')
+const {getArticles,updateArticleById}=require('./controllers/articles-controller')
 const {getComments,createComment}=require('./controllers/comments-controller')
  
 app.use(express.json())
@@ -15,6 +15,9 @@ app.get(`/api/articles/:article_id/comments`,getComments)
  
 //POST
 app.post('/api/articles/:article_id/comments',createComment)
+
+//PATCH
+app.patch('/api/articles/:article_id', updateArticleById)
 
 
 
