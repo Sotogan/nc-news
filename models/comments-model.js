@@ -23,3 +23,12 @@ return db.query(`SELECT comment_id,comments.votes,comments.created_at,comments.a
   })
 
  }
+
+ exports.deleteByCommentId=(params)=>{
+
+   const commentId=params.comment_id
+  
+  return db.query(`DELETE FROM comments WHERE comment_id=$1;`,[commentId])
+
+
+ }
