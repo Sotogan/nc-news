@@ -10,9 +10,7 @@ exports.getArticles=(req,res,next)=>{
 
 }
 exports.updateArticleById =(req,res,next)=>{
-  console.log(req.params)
-  console.log(req.body)
-  updatedArticleById(req.params,req.body).then((update)=>{
+    updatedArticleById(req.params,req.body).then((update)=>{
     res.status(200).send({update})
   }).catch((err)=>{
     next(err)

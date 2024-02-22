@@ -240,7 +240,7 @@ describe('GET /api/articles/:article:id/comments', () => {
             let response=await request(app)
             .patch(`/api/articles/${article_id}`)
             .send({vote_inc: newvote})
-            console.log(response.body.update[0].votes)
+           
             expect(response.body.update[0].votes).toEqual(1)
 
             
