@@ -1,4 +1,4 @@
-const {selectComments,addComment}=require('../models/comments-model')
+const {selectComments,addComment,deleteByCommentId}=require('../models/comments-model')
 
 
 
@@ -23,5 +23,14 @@ exports.createComment=(req,res,next)=>{
    }).catch((err)=>{
     next(err)
    })
+
+}
+
+exports.deleteComment=(req,res,next)=>{
+    deleteByCommentId(req.params).then(()=>{
+      res.status(204).send()
+    }).catch((err)=>{
+        next(err)
+    })
 
 }

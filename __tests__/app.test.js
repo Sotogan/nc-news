@@ -234,16 +234,31 @@ describe('GET /api/articles/:article:id/comments', () => {
     });
 
     describe('PATCH /api/articles/:article_id', () => {
-        test('should ',async () => {
-            const article_id=2
+        test('should patch votes with the new vote count ',async () => {
+            const article_id=1
             const newvote=1
             let response=await request(app)
             .patch(`/api/articles/${article_id}`)
             .send({vote_inc: newvote})
            
-            expect(response.body.update[0].votes).toEqual(1)
+            expect(response.body.update[0].votes).toEqual(101)
 
             
+            
+        });
+        
+    });
+
+
+
+    describe('DELETE /api/comments/:comment_id', () => {
+        test('should delete comment with given comment_id ',async () => {
+            const comment_id=1
+            let response=await request(app)
+            .delete(`/api/comments/${comment_id}`)
+            .expect(204)
+           
+                       
             
         });
         
