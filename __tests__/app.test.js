@@ -232,3 +232,19 @@ describe('GET /api/articles/:article:id/comments', () => {
     });
         
     });
+
+    describe('PATCH /api/articles/:article_id', () => {
+        test('should ',async () => {
+            const article_id=2
+            const newvote=1
+            let response=await request(app)
+            .patch(`/api/articles/${article_id}`)
+            .send({vote_inc: newvote})
+            console.log(response.body.update[0].votes)
+            expect(response.body.update[0].votes).toEqual(1)
+
+            
+            
+        });
+        
+    });
