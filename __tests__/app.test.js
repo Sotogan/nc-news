@@ -147,16 +147,16 @@ describe('GET /api/articles/:article:id/comments', () => {
     
 })
       })
-    //    test('should return an empty array for 0 comments for the given article_id ', () => {
-    //      const article_id=2
-    //     return request(app).get(`/api/articles/${article_id}/comments`)
-    //      .expect(200).then(({body})=>{
-    //          const {comments}=body
-    //          expect(comments).toBeInstanceOf(Array)
-    //          expect(comments).toHaveLength(0)
-    //      })
-    //  }
-    //      )
+        test('should return an empty array for 0 comments for the given article_id ', () => {
+          const article_id=2
+         return request(app).get(`/api/articles/${article_id}/comments`)
+          .expect(200).then(({body})=>{
+              const {comments}=body
+              expect(comments).toBeInstanceOf(Array)
+              expect(comments).toHaveLength(0)
+          })
+      }
+          )
   
       test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
          return request(app)
@@ -394,9 +394,7 @@ describe('GET /api/articles/:article:id/comments', () => {
          .get('/api/articles?topic=paper')
          .expect(200)
          .then((response)=>{
-                
-             const error=response.body
-             expect(error.articles).toEqual([])
+             expect(response.body.articles).toEqual([])
         });  
      })
  
