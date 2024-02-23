@@ -17,7 +17,7 @@ exports.selectArticles=(topic)=>{
         }
        sqlStr+=`GROUP BY articles.article_id ORDER BY created_at DESC`
         return db.query(sqlStr,queryVals)
-        .then((result)=>
+        .then((result)=>{
           
            return result.rows  })        
         
