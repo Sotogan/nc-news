@@ -1,7 +1,7 @@
 const express=require('express')
 const app=express()
-const{getTopics,getApiEndPoints,getArticleById}=require('./controllers/topics-controller')
-const {getArticles,updateArticleById}=require('./controllers/articles-controller')
+const{getTopics,getApiEndPoints}=require('./controllers/topics-controller')
+const {getArticles,getArticleById,updateArticleById}=require('./controllers/articles-controller')
 const {getComments,createComment,deleteComment}=require('./controllers/comments-controller')
 const {getUsers}=require('./controllers/users-controller')
 
