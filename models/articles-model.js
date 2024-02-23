@@ -15,7 +15,7 @@ exports.selectArticles=(topic)=>{
         return db.query(sqlStr,queryVals)
         .then((result)=>{
           if (result.rows.length===0){
-            return Promise.reject({status:404, msg:'id not found'})
+            return Promise.reject({status:404, msg:'Topic not found'})
         }
           
            return result.rows  })        

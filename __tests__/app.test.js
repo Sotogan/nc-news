@@ -386,7 +386,7 @@ describe('GET /api/articles/:article:id/comments', () => {
         .get('/api/articles?topic=dogs')
          .expect(404)
          .then((response)=>{
-            expect(response.body.msg).toBe('id not found');
+            expect(response.body.msg).toBe('Topic not found');
        });        
      });})
 //      test('should respond with apropriate error if topic exist but vhas no articles ', () => {
