@@ -389,7 +389,7 @@ describe('GET /api/articles/:article:id/comments', () => {
             expect(response.body.msg).toBe('Topic not found');
        });        
      });})
-      test('should respond with apropriate error if topic exist but vhas no articles ', () => {
+      test('should respond with empty array if topic exist but vhas no articles ', () => {
          return request(app)
          .get('/api/articles?topic=paper')
          .expect(200)
