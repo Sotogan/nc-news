@@ -17,7 +17,6 @@ exports.getComments=(req,res,next)=>{
 
 
 exports.createComment=(req,res,next)=>{
-       
    addComment(req.params,req.body).then((comment)=>{
     res.status(201).send({comment})
    }).catch((err)=>{
