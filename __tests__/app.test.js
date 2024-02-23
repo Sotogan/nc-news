@@ -206,20 +206,18 @@ describe('GET /api/articles/:article:id/comments', () => {
 
         })
     });
-    // test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
-    //     return request(app)
-    //     .post('/api/articles/666666/comments')
-    //     .expect (404)
+     test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
+         return request(app)
+         .post('/api/articles/666666/comments')
+         .expect (404)
+         .then((response)=>{
+          const error=response.body
+       
+             expect(error.msg).toBe('id not found')
+         })
         
-    //     .then((response)=>{
-         
-    //         const error=response.body
-         
-    //         expect(error.msg).toBe('id not found')
-    //     })
-        
-   // });
-    test('should respon with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
+    });
+    test('should respond with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
         return request(app)
         .post('/api/articles/forklift/comments')
         .expect(400)
@@ -231,6 +229,7 @@ describe('GET /api/articles/:article:id/comments', () => {
     });
         
     });
+
 
     describe('PATCH /api/articles/:article_id', () => {
         test('should patch votes with the new vote count ',async () => {
@@ -251,37 +250,135 @@ describe('GET /api/articles/:article:id/comments', () => {
             return request(app)
             .patch(`/api/articles/${article_id}`)
             .expect(400)
+            .send({vote_inc:newvote})
             .then((response)=>{
-   
-        
-                const error=response.body
+         
+               const error=response.body
+               
                 
                 expect(error.msg).toBe('bad request')
             })        
         });
+        test('should respond with an error if given a article_id of a valid type that exists in our data', () => {
+            const article_id=5555
+            const newvote=1
+            return request(app)
+            
+            .patch(`/api/articles/${article_id}`)
+            .expect (404)
+            .send({vote_inc:newvote})
+            .then((response)=>{
+             const error=response.body
+         
+                expect(error.msg).toBe('id not found')
+            })
+           
+       });
+       test('should respond with an error if vote_inc doesn\'t exist', () => {
+        const article_id=2
+        
+        return request(app)
+        .patch(`/api/articles/${article_id}`)
+        .expect (400)
+        .send()
+        .then((response)=>{
+         const error=response.body
+            expect(error.msg).toEqual('no vote value given')
+        })
+       
+   });
+   test('should respond with an error if vote_inc exists but is of wrong value', () => {
+    const article_id=2
+    const newVote='one'
+    return request(app)
+    .patch(`/api/articles/${article_id}`)
+    .expect (400)
+    .send({vote_inc:newVote})
+    .then((response)=>{
+     const error=response.body
+        expect(error.msg).toEqual('bad request')
+    })
+   
+});
+        
         
     });
 
 
 
     describe('DELETE /api/comments/:comment_id', () => {
-        test('should delete comment with given comment_id ',async () => {
+        test('should delete comment with given comment_id ',() => {
             const comment_id=1
-            let response=await request(app)
+            return request(app)        
             .delete(`/api/comments/${comment_id}`)
             .expect(204)
+     
            
                        
+            
+        });
+        test('should respond 404 comment_id does not exist ', () => {
+            const comment_id=5555
+            return request(app)
+            .delete(`/api/comments/${comment_id}`)
+            .expect(404)
+            .then((response) => {
+              expect(response.body.msg).toBe('comment_id does not exist');
+            });
+            
+        });
+        test('should respond 404 comment_id does not exist ', () => {
+            const comment_id='forklift'
+            return request(app)
+            .delete(`/api/comments/${comment_id}`)
+            .expect(400)
+            .then((response) => {
+              expect(response.body.msg).toBe('bad request');
+            });
             
         });
         
     });
 
-    // describe('GET /api/users', () => {
-    //     test('should delete comment with given comment_id ',async () => {
-    //         c
+       describe('GET /api/users', () => {
+         test('should respond with an array of objexts of the users with the specific values given ', () => {
+            return request(app).get('/api/users')
+            .expect(200)
+            .then(({body})=>{            
+               const {users}= body;
+               expect(users).toBeInstanceOf(Array);
+               expect(users).toHaveLength(4);
+               users.forEach((user)=>{
+                   expect(user).toMatchObject({
+                   username: expect.any(String),
+                   name: expect.any(String),
+                   avatar_url: expect.any(String)
+                   })
+               })
+            })
+           
                        
             
-    //     });
+         });
+         test('should respond with an error of Path not found if path is incorrect ', () => {
+            return request(app).get('/api/tpisdf')
+            .expect(404)
+            .then((response)=>{
+                const error=response.body
+                expect(error.msg).toBe('Path not found')
+            })
+        });
         
-    // });
+     });
+     describe('query on /api/articles topic', () => {
+       test('should take a topic query that returns only the articles of the specific topic ', () => {
+        return request(app)
+        .get('/api/articles?topic=cats')
+         .expect(200)
+         .then((response)=>{
+             const articles=response.body.articles
+             expect (articles).toHaveLength(1)
+            expect((articles[0].topic)).toBe('cats')
+        })
+       });        
+     });

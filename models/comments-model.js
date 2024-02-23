@@ -1,4 +1,5 @@
 const db=require('../db/connection')
+const selectArticleById=require('./topics-model')
 
 
 exports.selectComments= (article_id)=>{
@@ -13,13 +14,13 @@ return db.query(`SELECT comment_id,comments.votes,comments.created_at,comments.a
 })
 }
  exports.addComment=(param,newComment)=>{
-   const body=newComment.body
+  const body=newComment.body
    const  author=newComment.username
-   const  article_id=param.article_id 
+   const  article_id=param.article_id    
   return db.query(`INSERT INTO comments (body, author, article_id) VALUES ($1,$2,$3) RETURNING *;`,[body,author,article_id])
   .then(({rows})=>{
     if (rows.length===0){
-        return Promise.reject({status:404, msg:'id not found'})
+        
     }
     return rows[0]
   })
@@ -30,7 +31,13 @@ return db.query(`SELECT comment_id,comments.votes,comments.created_at,comments.a
 
    const commentId=params.comment_id
   
-  return db.query(`DELETE FROM comments WHERE comment_id=$1;`,[commentId])
+  return db.query(`DELETE FROM comments WHERE comment_id=$1 RETURNING *;`,[commentId])
+  .then((result)=>{
+    
+    if(result.rows.length ===0){
+      return Promise.reject({status: 404, msg:'comment_id does not exist'})
+     }
+    })
 
 
  }
