@@ -389,14 +389,14 @@ describe('GET /api/articles/:article:id/comments', () => {
             expect(response.body.msg).toBe('Topic not found');
        });        
      });})
-//      test('should respond with apropriate error if topic exist but vhas no articles ', () => {
-//         return request(app)
-//         .get('/api/articles?topic=2')
-//         .expect(400)
-//         .then((response)=>{
-
-//             const error=response.body
-//             expect(error.msg).toBe('bad request')
-//        });  
-//     })
-// })
+      test('should respond with apropriate error if topic exist but vhas no articles ', () => {
+         return request(app)
+         .get('/api/articles?topic=paper')
+         .expect(200)
+         .then((response)=>{
+                
+             const error=response.body
+             expect(error.articles).toEqual([])
+        });  
+     })
+ 

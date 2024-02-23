@@ -3,20 +3,21 @@ const db=require('../db/connection')
 
 
 exports.selectArticles=(topic)=>{
-  let sqlStr=`SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url,COUNT(comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id=comments.article_id `
-       const queryVals=[]
+    const  validTopics=['mitch','cats','paper']
+    const queryVals=[]
+    let sqlStr=`SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url,COUNT(comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id=comments.article_id `
+    if(!validTopics.includes(topic) && topic !==undefined){
+      return Promise.reject({status:404, msg:'Topic not found'})
+    }
+  
+     
        if(topic){
         sqlStr+=`WHERE articles.topic=$1 `
         queryVals.push(topic)
-        
-        
-       }
+        }
        sqlStr+=`GROUP BY articles.article_id ORDER BY created_at DESC`
         return db.query(sqlStr,queryVals)
-        .then((result)=>{
-          if (result.rows.length===0){
-            return Promise.reject({status:404, msg:'Topic not found'})
-        }
+        .then((result)=>
           
            return result.rows  })        
         
