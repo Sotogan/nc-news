@@ -64,8 +64,8 @@ describe('GET /api/articles/:article_id', () => {
                   topic: "mitch",
                   author: "icellusedkars",
                   body: "some gifs",
-                  article_img_url:
-                    "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+                  article_img_url:"https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+                  comment_count: '2'
                 })
            )
 
@@ -169,7 +169,7 @@ describe('GET /api/articles/:article:id/comments', () => {
              expect(error.msg).toBe('id not found')
          })
      });
-     test('should respon with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
+     test('should respond with an error if given a article_id of a  NON-valid type that does not exist in our database', () => {
          return request(app)
          .get('/api/articles/forklift/comments')
          .expect(400)
@@ -380,5 +380,23 @@ describe('GET /api/articles/:article:id/comments', () => {
              expect (articles).toHaveLength(1)
             expect((articles[0].topic)).toBe('cats')
         })
+       });  
+       test('should respond with apropriate error if topic does not exist ', () => {
+        return request(app)
+        .get('/api/articles?topic=dogs')
+         .expect(404)
+         .then((response)=>{
+            expect(response.body.msg).toBe('id not found');
        });        
-     });
+     });})
+//      test('should respond with apropriate error if topic exist but vhas no articles ', () => {
+//         return request(app)
+//         .get('/api/articles?topic=2')
+//         .expect(400)
+//         .then((response)=>{
+
+//             const error=response.body
+//             expect(error.msg).toBe('bad request')
+//        });  
+//     })
+// })
