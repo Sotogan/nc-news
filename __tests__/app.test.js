@@ -206,7 +206,7 @@ describe('GET /api/articles/:article:id/comments', () => {
 
         })
     });
-     test('should respond with an error if given a article_id of a valid type that does not exist in our data', () => {
+     test('should respond with an error if given an article_id of a valid type that does not exist in our data', () => {
          return request(app)
          .post('/api/articles/666666/comments')
          .expect (404)
