@@ -3,7 +3,7 @@ const db=require('../db/connection')
 
 
 exports.selectArticles=(topic)=>{
-    const  validTopics=['mitch','cats','paper']
+    const  validTopics=['mitch','cats','paper','coding','football','cooking']
     const queryVals=[]
     let sqlStr=`SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url,COUNT(comments.article_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id=comments.article_id `
     if(!validTopics.includes(topic) && topic !==undefined){
